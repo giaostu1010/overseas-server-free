@@ -62,8 +62,10 @@ check_length() {
             printf "%s\n" "${VNC_PASSWD}" | vncpasswd -f >passwd
         else
             x11vnc -storepasswd ${VNC_PASSWD} passwd
+        fi
         chmod 600 -v passwd
         cp passwd x11passwd
+
         chmod 600 -v x11passwd
     fi
 }
@@ -75,7 +77,11 @@ install_novnc() {
     chmod 755 /usr/local/bin/startvnc
 }
 install_firefox() {
-    apt install firefox -y
+    cd ${HOME}
+    wget --no-check-certificate "https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=zh-CN" -O Firefox.tar.bz2
+    tar xjf Firefox.tar.bz2 -C /opt/
+    ln -s /opt/firefox/firefox /usr/local/bin/firefox
+    wget https://raw.githubusercontent.com/mozilla/sumo-kb/main/install-firefox-linux/firefox.desktop -P ${HOME}/Desktop
 }
 finish() {
     printf "%s\n" "${GREEN}${BOLD}Install finish.${RESET}"
@@ -83,10 +89,8 @@ finish() {
     printf "%s\n" "Switch to the ${BLUE}PORTS${RESET} tab(切换到PORTS选项卡) and ${GREEN}open link with port 6080${RESET}(打开带6080端口的链接)."
     printf "%s\n" "Browser open new page,please click(新页面,请点击) ${BLUE}vnc.html${RESET}"
     printf "%s\n" "Click connect buttom,input VNC Password to login it.(点击连接按钮，输入VNC密码登录。)"
-    printf "%s\n" "Enjoy it :)"
-    # 切换到PORTS选项卡并打开带端口6080的链接。
-    # 浏览器打开新页面请点击vnc.html
-    # 点击连接按钮，输入VNC密码登录。
+    printf "%s\n" "${BLUE}Enjoy it :)${RESET}"
+
 }
 main() {
     WORK_DIR=$(pwd)
